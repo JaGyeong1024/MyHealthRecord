@@ -279,6 +279,7 @@ void GoalManagement(Stats stats) {
             scanf("%d", &Tweight);
             printf("목표 주별 운동 시간을 정수로 입력해주세요 (분): ");
             scanf("%d", &THealthTime);
+            system("cls");
             break;
         case 4:
             if (Pweight != 0 && Tweight != 0 && Initweight != 0 && THealthTime != 0) {
