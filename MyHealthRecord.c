@@ -11,7 +11,7 @@ int Pweight = 0;
 int Tweight = 0;
 int Initweight = 0;
 
-typedef struct Exercise{
+typedef struct Exercise {
     char ExerciseName[31];
     int SetCount;
     int Count;
@@ -25,7 +25,7 @@ typedef struct Node {
     struct Node* next;
 } Node;
 
-typedef struct Stats{
+typedef struct Stats {
     int totalSets;
     int totalCount;
     int totalWeight;
@@ -73,19 +73,27 @@ void InitExercises(Exercise exercises[10]) {
     }
 }
 void GetExercises(Exercise exercises[10]) {
+    int c;
     for (int i = 0; i < 10; i++) {
         printf("운동 이름을 입력하세요 (최대 30자(한글은 15자), 종료하려면 'end' 입력): ");
-        scanf("%s", exercises[i].ExerciseName);
+        fgets(exercises[i].ExerciseName, sizeof(exercises[i].ExerciseName), stdin);
+        exercises[i].ExerciseName[strcspn(exercises[i].ExerciseName, "\n")] = 0;
         if (strcmp(exercises[i].ExerciseName, "end") == 0) {
             strcpy(exercises[i].ExerciseName, "");
             break;
         }
+
         printf("세트 수를 입력하세요: ");
         scanf("%d", &exercises[i].SetCount);
+        while (getchar() != '\n'); // 버퍼 청소
+
         printf("횟수를 입력하세요: ");
         scanf("%d", &exercises[i].Count);
+        while (getchar() != '\n'); // 버퍼 청소
+
         printf("무게를 입력하세요(없으면 0 입력): ");
         scanf("%d", &exercises[i].Weight);
+        while (getchar() != '\n'); // 버퍼 청소
     }
 }
 void printRecords(Node* head) {
@@ -148,7 +156,6 @@ void RecordManagement(Node** head) {
                 printf("계속 입력하시겠습니까? (Y/N): ");
                 char cont;
 
-                getchar();
                 scanf("%c", &cont);
                 getchar();
                 if (cont != 'y' && cont != 'Y') {
@@ -186,13 +193,13 @@ void addExerciseStats(Node* node, int* totalSets, int* totalCount, int* totalWei
     for (int i = 0; i < 10 && node->exercise[i].ExerciseName[0] != '\0'; i++) {
         *totalSets += node->exercise[i].SetCount;
         *totalCount += node->exercise[i].Count;
-        *totalWeight += node->exercise[i].Weight*node->exercise[i].SetCount*node->exercise[i].Count;
+        *totalWeight += node->exercise[i].Weight * node->exercise[i].SetCount * node->exercise[i].Count;
         *totalVolume += node->exercise[i].SetCount * node->exercise[i].Count;
     }
 }
 Stats calculateSevendaysStats(Node* head) {
     Stats stats = { 0, 0, 0, 0, 0 };
-    if (head==NULL) {
+    if (head == NULL) {
         return stats;
     }
 
@@ -233,7 +240,7 @@ Stats calculateSevendaysStats(Node* head) {
 }
 void sevendaysStats(Node* head) {
     int num = 10;
-    if (head==NULL) {
+    if (head == NULL) {
         printf("============================================최근 7일 운동 통계===========================================\n");
         printf("운동 기록이 없습니다.\n");
         printf("=========================================================================================================\n");
@@ -284,7 +291,7 @@ void GoalManagement(Stats stats) {
         case 4:
             if (Pweight != 0 && Tweight != 0 && Initweight != 0 && THealthTime != 0) {
                 printf("=========================================================================================================\n");
-                printf("초기 체중 / 현재 체중 / 목표 체중: %dkg / %dkg / %dkg\n",Initweight, Pweight, Tweight);
+                printf("초기 체중 / 현재 체중 / 목표 체중: %dkg / %dkg / %dkg\n", Initweight, Pweight, Tweight);
                 printf("현재 주별 운동시간 / 목표 주별 운동시간: %d분 / %d분\n", stats.totalTime, THealthTime);
 
                 printf("현재 체중 목표 달성도\n");
